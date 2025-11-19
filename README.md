@@ -24,7 +24,7 @@ In addition to citing our manuscript, please cite **all seven** constituent meth
 
 ### Installation
 1. Clone this repository: `git clone https://github.com/Helix-Research-Lab/HOTPocket`
-2. Download the data from [Zenodo](https://zenodo.org/records/16891050) and move `hotpocket_data.tar.gz` into the `data` directory.
+2. Download the data from [Zenodo](https://zenodo.org/records/17653326) and move all desired files into this directory (`HOTPocket`)
 3. Install dependencies:
 	1. Set up `hotpocket` environment (required): `conda env create --name hotpocket --file=environment.yml`
 	2. Install dependencies for ESM2 (required to run *hotpocketNN* on new structures): follow instructions [here](https://github.com/facebookresearch/esm)
