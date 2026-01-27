@@ -3,9 +3,12 @@
 
 ![HOTPocket logo](hotpocket.png)
 
-This repository accompanies the manuscript "The Human Omnibus of Targetable Pockets", which is currently unpublished. HOTPocket = "The Human Omnibus of Targetable Pockets", aka the dataset. *hotpocketNN* = the method.
+This repository accompanies the manuscript "The Human Omnibus of Targetable Pockets." HOTPocket = "The Human Omnibus of Targetable Pockets", aka the dataset. *hotpocketNN* = the method.
 
 ### Citation
+> K. A. Carpenter and R. B. Altman, “The Human Omnibus of Targetable Pockets,” J. Cheminformatics, vol. 17, no. 1, p. 180, Dec. 2025, doi: 10.1186/s13321-025-01125-x.
+
+
 In addition to citing our manuscript, please cite **all seven** constituent methods directly:
 > B. Huang and M. Schroeder, “LIGSITEcsc: predicting ligand binding sites using the Connolly surface and degree of conservation,” BMC Struct. Biol., vol. 6, no. 19, 2006, doi: 10.1186/1472-6807-6-19.
 >

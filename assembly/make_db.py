@@ -1158,7 +1158,7 @@ def make_prank_df(df, makedir=False, start=0, n=-1):
 
 def main(args):
     if args.proteome_df_path:
-        df = pd.read_csv("../data/%s" % args.proteome_df_path, sep=",")
+        df = pd.read_csv(args.proteome_df_path, sep=",")
     if args.filedb:
         make_files_df(args.af2db_path, args.localpdb_path)
     if args.knowndb:
@@ -1181,6 +1181,11 @@ def main(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--proteome_df_path",
+        type=str,
+        help="location of dataframe with proteome structure files",
+    )
     parser.add_argument(
         "--af2db_path",
         type=str,
