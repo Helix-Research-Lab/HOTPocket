@@ -45,7 +45,7 @@ If your structure of interest does not have precomputed *hotpocketNN* pockets, y
 
     You must have PDB structure files of any proteins you would like to run *hotpocketNN* on. Generate a fasta file containing the exact sequence represented in the PDB file using the `pdbs_to_fasta` function in `utils.py`.
 
-    For the next step, you will need a dataframe of information about your structure. This should take a similar form as `data/proteome_structure_files_canonical.csv`; there needs to be `uniprot id`, `structure type`, `structure id`, and `structure file` columns. See the [data dictionary](data_dictionary.md) for descriptions of these columns. Note that the `structure file` column in the version of `proteome_structure_files_canonical.csv` from Zenodo has `nan` for all rows -- to use this dataframe, please fill in the path to your local copies of the structure files. 
+    For the next step, you will need a dataframe of information about your structure. This should take a similar form as `data/proteome_structure_files_canonical.csv`; there needs to be `uniprot id`, `structure type`, `structure id`, and `structure file` columns. See the [data dictionary](data_dictionary.md) for descriptions of these columns. The `structure id` does not need to match the filename of your PDB file. Note that the `structure file` column in the version of `proteome_structure_files_canonical.csv` from Zenodo has `nan` for all rows -- to use this dataframe, please fill in the path to your local copies of the structure files. 
 
 2. Run constituent pocket-finding methods
 

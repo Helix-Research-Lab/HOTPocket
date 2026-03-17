@@ -193,7 +193,8 @@ def run_pocket_program(df, method, start=0, n=-1, autosite_script_relative_path=
 
     for fpath in tqdm(df["structure file"]):
         fname = os.path.split(fpath)[1]
-        if "%s_out" % fname.split(".")[0] in os.listdir(dirname):
+        # Use os.path.splitext to properly handle filenames with multiple dots
+        if "%s_out" % os.path.splitext(fname)[0] in os.listdir(dirname):
             continue
 
         tmp_fpath = move_process_struct(fpath, dirname)
@@ -210,7 +211,7 @@ def run_pocket_program(df, method, start=0, n=-1, autosite_script_relative_path=
         elif method == "ligsite":
             # ligsite doesn't automatically create a folder for outputs, so we
             # will make one for organizational purposes
-            protdir = os.path.join(dirname, "%s_out" % fname.split(".")[0])
+            protdir = os.path.join(dirname, "%s_out" % os.path.splitext(fname)[0])
             if os.path.isdir(
                 protdir
             ):  # check again, sometimes already done with parallel processes
@@ -224,21 +225,23 @@ def run_pocket_program(df, method, start=0, n=-1, autosite_script_relative_path=
             subprocess.run(method_parts)
             os.chdir(wd)
         elif method == "pocketminer":
-            protdir = os.path.join(dirname, "%s_out" % fname.split(".")[0])
+            fname_base = os.path.splitext(fname)[0]
+            protdir = os.path.join(dirname, "%s_out" % fname_base)
             if not os.path.isdir(protdir):
                 os.mkdir(protdir)
-            outname = fname.split(".")[0]
+            outname = fname_base
             fpaths.append(tmp_fpath)
             outnames.append(outname)
             protdirs.append(protdir)
         elif method == "autosite":
+            fname_base = os.path.splitext(fname)[0]
             wd = os.getcwd()
             os.chdir(dirname)
             method_parts = [
                 "bash",
                 os.path.join(autosite_script_relative_path, "run_autosite.sh"),
                 fname,
-                "%s_out" % fname.split(".")[0],
+                "%s_out" % fname_base,
             ]
             subprocess.run(method_parts)
 
@@ -246,9 +249,9 @@ def run_pocket_program(df, method, start=0, n=-1, autosite_script_relative_path=
             rm_parts = [
                 "rm",
                 fname,
-                "%s_out_AutoSiteSummary.log" % fname.split(".")[0],
-                "%s_out.pdbqt" % fname.split(".")[0],
-                "%s_out_truncated.pdb" % fname.split(".")[0],
+                "%s_out_AutoSiteSummary.log" % fname_base,
+                "%s_out.pdbqt" % fname_base,
+                "%s_out_truncated.pdb" % fname_base,
             ]
             subprocess.run(rm_parts)
             os.chdir(wd)
@@ -612,8 +615,8 @@ def make_autosite_df(
     structure_ids = df["structure id"].tolist()
     for row_idx, fpath in enumerate(df["structure file"]):
         fname = os.path.split(fpath)[1]
-        fname = fname.split(".")[0]
-        out_dir = os.path.join("../data", "autosite", "%s_out" % fname)
+        fname_base = os.path.splitext(fname)[0]
+        out_dir = os.path.join("../data", "autosite", "%s_out" % fname_base)
         if not os.path.isdir(out_dir):
             continue
         pocket_npys = [f for f in os.listdir(out_dir) if f[-4:] == ".npy"]
@@ -859,14 +862,17 @@ def make_fpocket_df(df, makedir=True, start=0, n=-1):
     structure_ids = df["structure id"].tolist()
     for row_idx, fpath in enumerate(tqdm(df["structure file"])):
         fname = os.path.split(fpath)[1]
-        prot_dir = os.path.join("../data/fpocket", "%s_out" % fname.split(".")[0])
+        # Use os.path.splitext to properly handle filenames with multiple dots
+        fname_base = os.path.splitext(fname)[0]
+        prot_dir = os.path.join("../data/fpocket", "%s_out" % fname_base)
         pockets_dir = os.path.join(prot_dir, "pockets")
         if not os.path.isdir(pockets_dir):
             continue
         pockets = os.listdir(pockets_dir)
         pockets = [f for f in pockets if f[-4:] == ".pdb"]
 
-        info_fname = os.path.join(prot_dir, "%s_info.txt" % structure_ids[row_idx])
+        # Use filename (not structure_id) since fpocket outputs files based on input filename
+        info_fname = os.path.join(prot_dir, "%s_info.txt" % fname_base)
         scores_dict = get_fpocket_scores(info_fname)
         for p in pockets:
             pid = p.split("_")[0]
@@ -936,10 +942,10 @@ def make_ligsite_df(df, makedir=True):
     structure_ids = df["structure id"].tolist()
     for row_idx, fpath in enumerate(df["structure file"]):
         fname = os.path.split(fpath)[1]
-        fname = fname.split(".")[0]
-        out_dir = os.path.join("../data", "ligsite", "%s_out" % fname)
+        fname_base = os.path.splitext(fname)[0]
+        out_dir = os.path.join("../data", "ligsite", "%s_out" % fname_base)
         pockets_path = os.path.join(out_dir, "pocket.pdb")
-        pdb_path = os.path.join(out_dir, "%s.pdb" % fname)
+        pdb_path = os.path.join(out_dir, "%s.pdb" % fname_base)
         if (
             not os.path.isdir(out_dir)
             or not os.path.isfile(pockets_path)
@@ -1006,14 +1012,15 @@ def make_pocketminer_df(df, makedir=True, start=0, n=-1):
     structure_ids = df["structure id"].tolist()
     for row_idx, fpath in enumerate(tqdm(df["structure file"])):
         fname = os.path.split(fpath)[1]
+        fname_base = os.path.splitext(fname)[0]
         pockets_dir = os.path.join(
-            "../data/pocketminer", "%s_out" % fname.split(".")[0]
+            "../data/pocketminer", "%s_out" % fname_base
         )
         if not os.path.isdir(pockets_dir):
             print("dir not found")
             continue
         pocket_scores_file = os.path.join(
-            pockets_dir, "%s-preds.npy" % fname.split(".")[0]
+            pockets_dir, "%s-preds.npy" % fname_base
         )
         if not os.path.isfile(pocket_scores_file):
             print("scores not found")

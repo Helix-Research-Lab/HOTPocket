@@ -3,7 +3,8 @@ This document contains descriptions of columns found in the output files of *hot
 
 - *`uniprot id`* - the UniProt ID for the protein in question (can have multiple Uniprot IDs per structure) (string, *e.g.* `Q6N022`)
 - *`structure type`* - whether this structure is an experimentally-determined structure from the Protein Data Bank or a computationally-predicted structure from the AlphaFold2 Protein Structure Database; must either be `PDB` for the former case or `AF2` for the latter case (string, `AF2` or `PDB`)
-- *`structure id`* - the identifier for the structure in question, for PDB structures this is the PDB ID and for AF2 structures this is the UniProt ID (string, *e.g.* `1ubq` or `Q6N022`)
+- *`structure id`* - the identifier for the structure in question, for PDB structures this is the PDB ID and for AF2 structures this is the UniProt ID (string, *e.g.* `1ubq` or `Q6N022`). This does not need to match the PDB filename.
+- *`structure file`* - the full path to the PDB structure file (string, *e.g.* `/path/to/structure.pdb`). The filename can be different from the `structure id`.
 - *`pocket id`* - the identifier for the predicted pocket on this structure (string, *e.g.* `29` or `pocket29`)
 - *`pocket res`* - a string representation of all residues in this predicted pocket; residues are delimited by spaces and take the form [CHAIN]-[ONE LETTER AMINO ACID CODE][AMINO ACID INDEX] (string, *e.g.* `A-M101 A-I103 A-H104 A-A111`)
 - *`pocket length`* - the number of residues in this predicted pocket (int, *e.g.* `4`)
